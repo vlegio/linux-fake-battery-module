@@ -30,11 +30,6 @@ fake_battery_get_property1(struct power_supply *psy,
         union power_supply_propval *val);
 
 static int
-fake_battery_get_property2(struct power_supply *psy,
-        enum power_supply_property psp,
-        union power_supply_propval *val);
-
-static int
 fake_ac_get_property(struct power_supply *psy,
         enum power_supply_property psp,
         union power_supply_propval *val);
@@ -63,7 +58,6 @@ static int ac_status = 1;
 
 static char *fake_ac_supplies[] = {
     "BAT0",
-    "BAT1",
 };
 
 static enum power_supply_property fake_battery_properties[] = {
@@ -97,14 +91,6 @@ static struct power_supply_desc descriptions[] = {
         .properties = fake_battery_properties,
         .num_properties = ARRAY_SIZE(fake_battery_properties),
         .get_property = fake_battery_get_property1,
-    },
-
-    {
-        .name = "BAT1",
-        .type = POWER_SUPPLY_TYPE_BATTERY,
-        .properties = fake_battery_properties,
-        .num_properties = ARRAY_SIZE(fake_battery_properties),
-        .get_property = fake_battery_get_property2,
     },
 
     {
@@ -289,7 +275,7 @@ fake_battery_generic_get_property(struct power_supply *psy,
 {
     switch (psp) {
         case POWER_SUPPLY_PROP_MANUFACTURER:
-            val->strval = "Linux";
+            val->strval = "Ancr";
             break;
         case POWER_SUPPLY_PROP_STATUS:
             val->intval = status->status;
@@ -342,31 +328,13 @@ fake_battery_get_property1(struct power_supply *psy,
 {
     switch (psp) {
         case POWER_SUPPLY_PROP_MODEL_NAME:
-            val->strval = "Fake battery 1";
+            val->strval = "100MDCF12";
             break;
         case POWER_SUPPLY_PROP_SERIAL_NUMBER:
-            val->strval = "12345678";
+            val->strval = "53079399548";
             break;
         default:
             return fake_battery_generic_get_property(psy, psp, val, &fake_battery_statuses[0]);
-    }
-    return 0;
-}
-
-static int
-fake_battery_get_property2(struct power_supply *psy,
-        enum power_supply_property psp,
-        union power_supply_propval *val)
-{
-    switch (psp) {
-        case POWER_SUPPLY_PROP_MODEL_NAME:
-            val->strval = "Fake battery 2";
-            break;
-        case POWER_SUPPLY_PROP_SERIAL_NUMBER:
-            val->strval = "12345678";
-            break;
-        default:
-            return fake_battery_generic_get_property(psy, psp, val, &fake_battery_statuses[1]);
     }
     return 0;
 }
